@@ -1,0 +1,28 @@
+show/buffer: planet
+window:
+  width: 1280
+  height: 720
+
+buffer/planet:
+  depth: true
+
+render/planet:
+  clear: true
+  depth: true
+  camera: myCamera
+  mesh: planet
+  src: earth
+  transform:
+    mode: contain
+
+camera/myCamera:
+  zoom: -0.5
+  pitch: -49
+  yaw: 213
+  roll: 30
+
+mesh/planet:
+  aspect: 1
+  sphere:
+    rows: 40
+    cols: 40

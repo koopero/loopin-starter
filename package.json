@@ -1,0 +1,23 @@
+{
+  "name": "loopin-starter",
+  "version": "0.9.0",
+  "description": "Starter project for Loopin applications.",
+  "main": "node/loopin.js",
+  "scripts": {
+    "start": "./node/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/koopero/loopin-starter.git"
+  },
+  "keywords": [
+    "Loopin"
+  ],
+  "author": "Samm Zuest Cooper <samm@sublight.ca>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/koopero/loopin-starter/issues"
+  },
+  "homepage": "https://github.com/koopero/loopin-starter#readme"
+}
