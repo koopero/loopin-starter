@@ -1,25 +1,34 @@
 const loopin = module.exports = require('loopin').global()
 const config = require('./config')
 
+// Resolve to project root
+const resolve = require('path').resolve.bind( null, __dirname, '..')
+
+
 loopin.plugin('horten','loopin/')
 loopin.plugin('files')
-loopin.filesRoot( require('path').resolve( __dirname, '..' ) )
+loopin.filesRoot( resolve() )
 
 loopin.plugin('presetDir')
-loopin.presetDir( { autoload: true })
+loopin.presetDir( { autoload: true } )
 
 loopin.plugin('shaderDir')
-loopin.shaderDir()
+loopin.shaderDir( { autoload: true } )
 
 loopin.plugin('imageDir')
-loopin.imageDir()
+loopin.imageDir( { watch: true, autoload: true } )
 
 loopin.plugin( require('./logic/snapshot' ) )
 
 if ( config.get('debug.verbose') )
   loopin.logShow('patch')
 
-loopin.plugin('bootstrap')
+loopin.plugin( require('loopin-native'), {
+  root: resolve('native'),
+  useEnv: true
+} )
 
-// This will be the new way!
-// loopin.plugin( require('loopin-native'), {} )
+loopin.bootstrap()
+.then( function () {
+  // Loopin is sucessfully booted!
+})

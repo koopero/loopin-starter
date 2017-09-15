@@ -1,0 +1,31 @@
+show/buffer: example_planet
+
+# Create a `buffer` named 'example_planet'.
+# The default size of the buffer will match
+# the size of the application window.
+buffer/example_planet:
+  depth: true
+
+render/example_planet:
+  clear: true
+  depth: true
+  shader: example_planet
+  camera: example_camera
+  mesh: planet
+  src: example_earth
+  transform:
+    mode: contain
+
+camera/example_camera:
+  zoom: -0.25
+  pitch: -49
+  yaw: 213
+  roll: 20
+
+# Define the mesh used for 'render/example_planet',
+# in this case a sphere.
+mesh/planet:
+  aspect: 1
+  sphere:
+    rows: 80
+    cols: 80

@@ -1,8 +1,8 @@
 {
   "name": "loopin-starter",
-  "version": "0.9.0",
+  "version": "0.8.0-alpha",
   "description": "Starter project for Loopin applications.",
-  "main": "node/loopin.js",
+  "main": "./node/index.js",
   "scripts": {
     "start": "./node/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -19,5 +19,13 @@
   "bugs": {
     "url": "https://github.com/koopero/loopin-starter/issues"
   },
-  "homepage": "https://github.com/koopero/loopin-starter#readme"
+  "homepage": "https://github.com/koopero/loopin-starter#readme",
+  "dependencies": {
+    "config": "^1.26.2",
+    "horten": "^0.8.3",
+    "js-yaml": "^3.10.0",
+    "loopin": "^0.5.4",
+    "loopin-native": "^0.7.3",
+    "loopin-server": "^0.1.1"
+  }
 }

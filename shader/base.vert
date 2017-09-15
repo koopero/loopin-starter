@@ -1,5 +1,10 @@
 #version 150
+/*
+  This is a copy of ofxLoopin's default GLSL vertex shader.
 
+  To create your own shader, duplicate this file within the
+  'shader/' directory with the extension '.vert'
+*/
 
 /*
 

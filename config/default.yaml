@@ -4,13 +4,13 @@ debug:
 server:
   listen: 7004
 
-  index: control/index.md
+  index: control/example.md
 
   page:
     title: Loopin Stater Project
     nav:
-      - title: Main
-        page: control/index.md
+      - title: Example
+        page: control/example.md
 
       - title: Utility
         page: control/utility.md
