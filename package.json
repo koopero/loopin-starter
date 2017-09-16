@@ -24,8 +24,8 @@
     "config": "^1.26.2",
     "horten": "^0.8.3",
     "js-yaml": "^3.10.0",
-    "loopin": "^0.5.4",
-    "loopin-native": "^0.7.3",
-    "loopin-server": "^0.1.1"
+    "loopin": "^0.8.0-alpha",
+    "loopin-native": "^0.8.0-alpha",
+    "loopin-server": "^0.1.2"
   }
 }
