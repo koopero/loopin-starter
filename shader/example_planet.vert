@@ -18,9 +18,10 @@ in vec4 color;
 in vec4 normal;
 
 out vec2 srcCoord;
-out vec4 vertColour;
+out vec3 lightNormal;
 
 uniform float clockTime;
+uniform float lightPitch = 90.0;
 
 /*
   There's lots of copy pasta in GLSL.
@@ -32,23 +33,38 @@ vec2 rotate(vec2 v, float a) {
 	mat2 m = mat2(c, -s, s, c);
 	return m * v;
 }
+const float PI = 3.1415;
 
 uniform float planetSpeed = 50000.0;
 
 void main()
 {
     srcCoord = texcoord.xy;
-    vertColour = vec4(1,1,1,1);
 
 
     vec4 pos = position;
     pos.xz = rotate( pos.xz,
       clockTime
       * planetSpeed
-      / 86400.0 // seconds per day
+      / 60.0
       * 3.1415926
       * 2.0
     );
+
+		lightNormal = normal.xyz;
+
+
+
+    lightNormal.xz = rotate( lightNormal.xz,
+      clockTime
+      * planetSpeed
+      / 60.0
+      * 3.1415926
+      * 2.0
+    );
+		
+  	lightNormal.xy = rotate( lightNormal.xy , lightPitch / 180.0 * PI);
+
 
     gl_Position = modelViewProjectionMatrix * pos;
 }

@@ -1,3 +1,20 @@
+``` control
+path: loopin/show/buffer
+options:
+  - example_planet
+  - example_lightmap
+  - example_earth
+  - example_moon
+  - example_jupiter
+```
+
+``` control
+path: loopin/show/filter
+options:
+  - linear
+  - nearest
+```
+
 
 ## Planet
 
@@ -6,17 +23,17 @@ path: loopin/render/example_planet/src/buffer
 options:
   - example_earth
   - example_moon
+  - example_jupiter
 ```
 
 ``` control
 path: loopin/render/example_planet/float/planetSpeed
 type: float
-min: 1
-max: 100000
+min: 0.00001157407381
+max: 60
 pow: 3
-digits: 5
-metric: true
-unit: ' x'
+digits: 3
+unit: 'rpm'
 ```
 
 ``` control
@@ -29,7 +46,19 @@ digits: 3
 unit: '%'
 ```
 
-## Camera
+## Projection
+
+### Render
+``` control
+path: loopin/render/example_planet/passes
+type: float
+digits: 0
+min: 1
+max: 64
+pow: 2
+```
+
+### Camera
 
 ``` control
 path: loopin/camera/example_camera
@@ -83,4 +112,51 @@ subs:
     min: -45
     max: 45
     unit: deg
+```
+
+### Mesh
+``` control
+path: loopin/mesh/example_sphere/sphere
+subs:
+  rows:
+    type: float
+    min: 3
+    max: 50
+    digits: 0
+  cols:
+    type: float
+    min: 3
+    max: 50
+    digits: 0
+```
+
+
+``` control
+path: loopin/pixels/example_lightmap/data
+type: pixels
+cols: 8
+rows: 1
+channels: rgb
+```
+
+
+### Lighting
+``` control
+path: loopin/render/example_planet/float/lightPitch
+type: float
+min: -90
+max: 90
+```
+
+``` control
+path: loopin/render/example_planet/texture/lightmap
+subs:
+  buffer:
+    options:
+      - white
+      - example_lightmap
+  filter:
+    options:
+      - linear
+      - nearest
 ```

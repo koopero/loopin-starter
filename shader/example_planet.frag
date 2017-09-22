@@ -1,11 +1,15 @@
 #version 150
 uniform sampler2D srcSampler;
+
+uniform sampler2D lightmapSampler;
+
 in vec2 srcCoord;
+in vec3 lightNormal;
+
 out vec4 outputColour;
 
 uniform float planetSpeed = 50000.0;
 uniform float planetBlurAmount = 1.0;
-
 uniform float clockDelta;
 
 
@@ -21,13 +25,21 @@ void main()
       clockDelta
       * planetBlurAmount
       * planetSpeed
-      / 86400.0
+      / 60.0
       , 0
     ) * blurMix;
 
   for ( int i = 0; i < blurSamples; i ++ ) {
     colour += texture(srcSampler, srcCoord + blurDisplace * float(i) ) * blurMix;
   }
+
+
+  vec2 light = -lightNormal.xy;
+  light.x += 1;
+  light.x *= 0.5;
+  light.y = 0;
+
+  colour *= texture(lightmapSampler, light );
 
   outputColour = colour;
 }

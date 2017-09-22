@@ -11,10 +11,14 @@ render/example_planet:
   depth: true
   shader: example_planet
   camera: example_camera
-  mesh: planet
+  mesh: example_sphere
   src: example_earth
   transform:
     mode: contain
+  texture:
+    lightmap:
+      buffer: example_lightmap
+      wrap: clamp
 
 camera/example_camera:
   zoom: -0.25
@@ -24,8 +28,13 @@ camera/example_camera:
 
 # Define the mesh used for 'render/example_planet',
 # in this case a sphere.
-mesh/planet:
+mesh/example_sphere:
   aspect: 1
   sphere:
-    rows: 80
-    cols: 80
+    rows: 40
+    cols: 40
+
+
+pixels/example_lightmap:
+  format: hex
+  channels: rgb
