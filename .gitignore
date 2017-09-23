@@ -3,11 +3,7 @@ tmp/
 
 # Snapshots from running application.
 data/**
-
-# Depending on your application, you may want to 
-# include persist.yaml in your CVS. If so,
-# uncomment the following line.
-# !data/persist.yaml
+!data/persist.yaml
 
 # Binary files from loopin-native
 native/
