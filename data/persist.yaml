@@ -1,0 +1,197 @@
+# written by horten-persist-file at 2017-09-23T00:22:32-07:00
+loopin:
+  native:
+    pid: 21627
+  window:
+    fullscreen: false
+    height: 720
+    width: 1280
+    x: -1792
+    'y': 224
+  image:
+    example_earth:
+      error: null
+      file: /Volumes/hdd/koop/loopin/loopin-starter/image/example_earth.jpg
+      height: 500
+      loaded: true
+      width: 1000
+    example_moon:
+      error: null
+      file: /Volumes/hdd/koop/loopin/loopin-starter/image/example_moon.jpg
+      height: 32
+      loaded: true
+      width: 64
+    example_tethys:
+      error: null
+      file: /Volumes/hdd/koop/loopin/loopin-starter/image/example_tethys.jpg
+      height: 256
+      loaded: true
+      width: 512
+    example_jupiter:
+      error: null
+      file: /Volumes/hdd/koop/loopin/loopin-starter/image/example_jupiter.jpg
+      height: 64
+      loaded: true
+      width: 128
+    earthmap1k:
+      error: null
+      file: /Volumes/hdd/koop/loopin/loopin-starter/image/earthmap1k.jpg
+      height: 500
+      loaded: true
+      width: 1000
+    example_earth_small:
+      error: null
+      file: /Volumes/hdd/koop/loopin/loopin-starter/image/example_earth_small.jpg
+      height: 64
+      loaded: true
+      width: 128
+    8081-earthmap10k:
+      error: null
+      file: /Volumes/hdd/koop/loopin/loopin-starter/image/8081-earthmap10k.jpg
+      height: 5400
+      loaded: true
+      width: 10800
+  shader:
+    example_planet:
+      vert:
+        data: "#version 150\n/*\n  This is a copy of ofxLoopin's default GLSL vertex shader.\n\n  To create your own shader, duplicate this file within the\n  'shader/' directory with the extension '.vert'\n*/\n\n/*\n\n\n*/\nuniform mat4 modelViewProjectionMatrix;\n\nin vec4 position;\nin vec2 texcoord;\nin vec4 color;\nin vec4 normal;\n\nout vec2 srcCoord;\nout vec3 lightNormal;\n\nuniform float clockTime;\nuniform float lightPitch = 90.0;\n\n/*\n  There's lots of copy pasta in GLSL.\n  This was ganked from https://gist.github.com/yiwenl/3f804e80d0930e34a0b33359259b556c\n*/\nvec2 rotate(vec2 v, float a) {\n\tfloat s = sin(a);\n\tfloat c = cos(a);\n\tmat2 m = mat2(c, -s, s, c);\n\treturn m * v;\n}\nconst float PI = 3.1415;\n\nuniform float planetSpeed = 50000.0;\n\nvoid main()\n{\n    srcCoord = texcoord.xy;\n\n\n    vec4 pos = position;\n    // pos.xz = rotate( pos.xz,\n    //   clockTime\n    //   * planetSpeed\n    //   / 60.0\n    //   * 3.1415926\n    //   * 2.0\n    // );\n\n\tlightNormal = normal.xyz;\n    // lightNormal.xz = rotate( lightNormal.xz,\n    //   clockTime\n    //   * planetSpeed\n    //   / 60.0\n    //   * 3.1415926\n    //   * 2.0\n    // );\n\n  float phase = clockTime;\n  phase *= planetSpeed;\n  phase /= 60;\n\tphase /= 365;\n  phase = fract( phase );\n\n  \tlightNormal.xy = rotate( lightNormal.xy,\n\t\t\t( lightPitch + cos( phase * PI * 2.0 ) * 23 )\n\t\t\t/ 180.0 * PI\n\t\t);\n\n\n    gl_Position = modelViewProjectionMatrix * pos;\n}\n"
+        file: /Volumes/hdd/koop/loopin/loopin-starter/shader/example_planet.vert
+      frag:
+        data: |
+          #version 150
+          uniform sampler2D srcSampler;
+
+          uniform sampler2D lightmapSampler;
+
+          in vec2 srcCoord;
+          in vec3 lightNormal;
+
+          out vec4 outputColour;
+
+          uniform float planetSpeed = 50000.0;
+          uniform float planetBlurAmount = 1.0;
+          uniform float clockTime;
+          uniform float clockDelta;
+          uniform float lightGamma = 0.5;
+          uniform float lightGain = 1.0;
+
+
+
+          void main()
+          {
+            vec2 coord = srcCoord;
+
+            float phase = clockTime;
+            phase *= planetSpeed;
+            phase /= 60;
+
+            phase = fract( phase );
+            phase += coord.x;
+            coord.x = phase;
+
+
+            vec4 colour = vec4(0,0,0,0);
+
+            int blurSamples = 32;
+
+            float blurMix = 1.0/float(blurSamples);
+            vec2 blurDisplace = vec2(
+                1.0/60.0
+                * planetBlurAmount
+                * planetSpeed
+                / 60.0
+                , 0
+              ) * blurMix;
+
+            for ( int i = 0; i < blurSamples; i ++ ) {
+              colour += texture(srcSampler, coord + blurDisplace * float(i) ) * blurMix;
+            }
+
+
+            vec2 light = -lightNormal.xy;
+            light.x += 1;
+            light.x *= 0.5;
+            light.y = 0;
+
+            colour *= texture(lightmapSampler, light );
+
+            colour.r = pow( colour.r, lightGamma );
+            colour.g = pow( colour.g, lightGamma );
+            colour.b = pow( colour.b, lightGamma );
+            // colour.r = light.x;
+
+            colour.rgb *= lightGain;
+
+            outputColour = colour;
+          }
+        file: /Volumes/hdd/koop/loopin/loopin-starter/shader/example_planet.frag
+      loaded: true
+      stderr: "[ error ] ofShader: setupShaderFromSource(): GL_FRAGMENT_SHADER shader failed to compile\n[ error ] ofShader: GL_FRAGMENT_SHADER shader reports:\nERROR: 0:28: Use of undeclared identifier 'pahse'\n[ error ] ofShader: GL_FRAGMENT_SHADER, offending line 28 :\n\t   26\t\n\t   27\t  phase = fract( phase );\n\t   28\t  pahse += coord.x;\n\t   29\t  coord.x = phase;\n\t   30\t\n[ error ] ofShader: checkProgramLinkStatus(): program failed to link\n[ error ] ofShader: ofShader: program reports:\nERROR: One or more attached shaders not successfully compiled\n"
+    default:
+      loaded: true
+    solidRGBA:
+      frag:
+        data: |
+          #version 150
+
+          uniform float red;
+          uniform float green;
+          uniform float blue;
+          uniform float alpha;
+
+          out vec4 OUT;
+
+          void main()
+          {
+            OUT = vec4( red, green, blue, alpha );
+          }
+        file: /Volumes/hdd/koop/loopin/loopin-native/data/shader/solidRGBA.frag
+      loaded: true
+    blank:
+      loaded: true
+  input:
+    x: -1
+    'y': -1
+  camera:
+    example_camera:
+      zoom: 1.5039577836411602
+      distance: 2.5521108179419505
+      fov: 47.580474934036936
+      yaw: -86.91292875989447
+      pitch: -2.8080474934037127
+      roll: 1.0839416058394065
+  render:
+    example_planet:
+      float:
+        planetSpeed: 1.0595451129578295
+        planetBlurAmount: 0.8735616626550875
+        lightPitch: 56.39841688654349
+        lightGamma: 2.4318601583113457
+        lightGain: 2.7710132161082157
+        float:
+          planetSpeed: 600
+      src:
+        buffer: example_earth
+      passes: 3.014253760799975
+      texture:
+        lightmap:
+          filter: linear
+          buffer: white
+      planetSpeed: 120
+    example_sphere:
+      float:
+        lightPitch: 110.2352941176471
+  mesh:
+    example_sphere:
+      sphere:
+        rows: 47.58179419525067
+        cols: 43.67546174142482
+      float:
+        lightPitch: 48.00000000000006
+  pixels:
+    example_lightmap:
+      data: 0000c0 00118d 00276b 001459 b79170 ccbfbd e3e8f5 ffffff
+  show:
+    buffer: example_planet
+    filter: linear
+logic: !<tag:yaml.org,2002:js/undefined> ''

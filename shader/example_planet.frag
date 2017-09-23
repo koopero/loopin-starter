@@ -10,19 +10,33 @@ out vec4 outputColour;
 
 uniform float planetSpeed = 50000.0;
 uniform float planetBlurAmount = 1.0;
+uniform float clockTime;
 uniform float clockDelta;
+uniform float lightGamma = 0.5;
+uniform float lightGain = 1.0;
+
 
 
 void main()
 {
   vec2 coord = srcCoord;
 
+  float phase = clockTime;
+  phase *= planetSpeed;
+  phase /= 60;
+
+  phase = fract( phase );
+  phase += coord.x;
+  coord.x = phase;
+
+
   vec4 colour = vec4(0,0,0,0);
 
   int blurSamples = 32;
+
   float blurMix = 1.0/float(blurSamples);
   vec2 blurDisplace = vec2(
-      clockDelta
+      1.0/60.0
       * planetBlurAmount
       * planetSpeed
       / 60.0
@@ -30,7 +44,7 @@ void main()
     ) * blurMix;
 
   for ( int i = 0; i < blurSamples; i ++ ) {
-    colour += texture(srcSampler, srcCoord + blurDisplace * float(i) ) * blurMix;
+    colour += texture(srcSampler, coord + blurDisplace * float(i) ) * blurMix;
   }
 
 
@@ -40,6 +54,13 @@ void main()
   light.y = 0;
 
   colour *= texture(lightmapSampler, light );
+
+  colour.r = pow( colour.r, lightGamma );
+  colour.g = pow( colour.g, lightGamma );
+  colour.b = pow( colour.b, lightGamma );
+  // colour.r = light.x;
+
+  colour.rgb *= lightGain;
 
   outputColour = colour;
 }

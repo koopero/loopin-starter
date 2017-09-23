@@ -30,7 +30,7 @@ options:
 path: loopin/render/example_planet/float/planetSpeed
 type: float
 min: 0.00001157407381
-max: 60
+max: 300
 pow: 3
 digits: 3
 unit: 'rpm'
@@ -103,14 +103,14 @@ subs:
 
   pitch:
     type: float
-    min: -45
-    max: 45
+    min: -49.5
+    max: 49.5
     unit: deg
 
   roll:
     type: float
-    min: -45
-    max: 45
+    min: -49.5
+    max: 49.5
     unit: deg
 ```
 
@@ -142,10 +142,23 @@ channels: rgb
 
 ### Lighting
 ``` control
-path: loopin/render/example_planet/float/lightPitch
-type: float
-min: -90
-max: 90
+path: loopin/render/example_planet/float
+subs:
+  lightPitch:
+    type: float
+    min: -90
+    max: 90
+
+  lightGamma:
+    type: float
+    min: 0.1
+    max: 3
+
+  lightGain:
+    type: float
+    min: 0.25
+    max: 4
+    pow: 2
 ```
 
 ``` control
