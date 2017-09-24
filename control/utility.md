@@ -27,6 +27,8 @@ toggle: true
 
 ## Snapshot
 
+The `snapshot` utility takes quick screenshots of a given buffer. They are saved to [./data/snap/](/loopin/file/data/snap/). This utility is implemented by [./node/logic/snapshot.js](/loopin/file//node/logic/snapshot.js)
+
 ``` control
 path: logic/snapshot
 subs:
@@ -35,10 +37,46 @@ subs:
     title: Snap
     hide: all
 
+  format:
+    options:
+      - .jpg
+      - .png
+
   buffer:
     options:
       - example_planet
 ```
+
+# Recorder
+
+``` control
+path: logic/recorder
+subs:
+  start:
+    type: trigger
+
+  rate:
+    options: [ 8, 15, 30, 60 ]
+
+  count:
+    type: slider
+    min: 30
+    max: 3000
+    precision: 0
+    pow: 2.2
+
+
+  duration:
+    type: slider
+    min: 0.25
+    max: 60
+    unit: s
+
+  buffer:
+    options:
+      - example_planet
+```
+
 
 ## OSD
 

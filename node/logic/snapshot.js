@@ -11,23 +11,14 @@ function snapshot() {
   const cursor = new H.Cursor( {
     listening: true,
     path: 'logic/snapshot',
-    onValue
+    onValue: v => v && v.snap && snap( v.snap )
   } )
 
-  return
-
-  function onValue( v ) {
-    if ( !v )
-      return
-
-    if ( v.snap ) {
-      snap( v.snap )
-    }
-  }
+  return cursor
 
   function filename() {
     const t = new Date().getTime()
-        , ext = '.jpg'
+        , ext = cursor.get('ext') || '.jpg'
         , prefix = cursor.get('prefix') || 'data/snap/snap.'
         , base = prefix + t.toFixed(0) + ext
 
@@ -37,7 +28,7 @@ function snapshot() {
   function snap() {
     return loopin.save( cursor.get('buffer'), { dest: filename() } )
       .then( function ( data ) {
-
+        // done
       })
   }
 }

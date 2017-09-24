@@ -19,6 +19,8 @@ loopin.plugin('imageDir')
 loopin.imageDir( { watch: true, autoload: true } )
 
 loopin.plugin( require('./logic/snapshot' ) )
+loopin.plugin( require('./logic/recorder' ) )
+
 
 if ( config.get('debug.verbose') )
   loopin.logShow('patch')
