@@ -18,7 +18,7 @@ function snapshot() {
 
   function filename() {
     const t = new Date().getTime()
-        , ext = cursor.get('ext') || '.jpg'
+        , ext = cursor.get('extension') || '.jpg'
         , prefix = cursor.get('prefix') || 'data/snap/snap.'
         , base = prefix + t.toFixed(0) + ext
 

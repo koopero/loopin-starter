@@ -1,8 +1,10 @@
-This is a simple starter project for the [Loopin](https://github.com/koopero/loopin) creative coding system.
+This is a simple starter project for the [Loopin](https://github.com/koopero/loopin) creative coding system. It includes all the boilerplate and dependencies required to start development of a Loopin application. As well, it includes an example demo, implementing a spinning planet with motion blur and a cartoonishly simple, but expressive, lighting model.
+
+![Sample output of loopin-starter](image/example_planet.jpg)
 
 ## Requirements
 
-*Windows is not supported at this time.* This project should work on a properly configured Intel-based Mac or Linux box. See: [Requirements on the Wiki](https://loopin.tech/Requirements.html)
+*Windows is not supported at this time.* This project should work on a properly configured Intel-based Mac or Linux box. See: [Requirements on the Wiki](https://loopin.tech/Requirements.html). As well, to use the `recorder` function of this demo, you will need [ffmpeg](http://www.ffmpeg.org/download.html).
 
 ## Installation
 
@@ -29,7 +31,7 @@ Contains **Markdown** control files. These are documents which contain simple, i
 Used by the application to store runtime generated data.
 
 ### data/persist.yaml
-This is the data file which the [loopin-server](https://github.com/koopero/loopin-server) module uses to save application state between runs. 
+This is the data file which the [loopin-server](https://github.com/koopero/loopin-server) module uses to save application state between runs.
 
 ### image/
 Contains `.jpg` and `.png` [images](https://loopin.tech/ofxLoopin-image.html), which will be autoloaded by default.

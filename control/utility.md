@@ -37,7 +37,7 @@ subs:
     title: Snap
     hide: all
 
-  format:
+  extension:
     options:
       - .jpg
       - .png

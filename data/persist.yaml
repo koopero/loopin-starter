@@ -1,13 +1,13 @@
-# written by horten-persist-file at 2017-09-24T03:06:54-07:00
+# written by horten-persist-file at 2017-09-25T19:13:36-07:00
 loopin:
   native:
     pid: 8062
   window:
-    fullscreen: true
+    fullscreen: false
     height: 720
     width: 1280
-    x: -1920
-    'y': 166
+    x: -1898
+    'y': 209
     cursor: true
   image:
     example_earth:
@@ -54,6 +54,12 @@ loopin:
       width: 10800
     jupiter2_1k:
       file: /Volumes/hdd/koop/loopin/loopin-starter/image/jupiter2_1k.jpg
+    example_planet:
+      error: null
+      file: /Volumes/hdd/koop/loopin/loopin-starter/image/example_planet.jpg
+      height: 720
+      loaded: true
+      width: 1280
   shader:
     example_planet:
       vert:
@@ -74,6 +80,7 @@ loopin:
           uniform float planetBlurAmount = 1.0;
           uniform float clockTime;
           uniform float clockDelta;
+
           uniform float lightGamma = 0.5;
           uniform float lightGain = 1.0;
           uniform float lightContrast = 1.0;
@@ -152,13 +159,14 @@ loopin:
           {
             OUT = vec4( red, green, blue, alpha );
           }
-        file: /Volumes/hdd/koop/loopin/loopin-native/data/shader/solidRGBA.frag
+        file: >-
+          /Volumes/hdd/koop/loopin/loopin-starter/native/ofxLoopin-0.8.0-alpha-osx/bin/data/ofxLoopin/shader/solidRGBA.frag
       loaded: true
     blank:
       loaded: true
   input:
-    x: -1
-    'y': -1
+    x: 0.5281250476837158
+    'y': 0.9166666269302368
   camera:
     example_camera:
       zoom: 1.153034300791556
@@ -206,10 +214,9 @@ loopin:
     filter: linear
   save:
     example_planet:
-      dest: >-
-        /Volumes/hdd/koop/loopin/loopin-starter/data/recorder/frames/example_planet.1506246907407.0600.jpg
+      dest: /Volumes/hdd/koop/loopin/loopin-starter/data/snap/snap.1506392001631.jpg
       format: jpg
-      frame: 72080
+      frame: 1
       quality: best
   osd:
     enabled: false
