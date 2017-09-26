@@ -1,18 +1,13 @@
 
 # Window
 
+Loopin is designed to complete own the host machine. Therefore, we can remotely
+control parameters of the application's window.
+
 ``` control
 path: loopin/window/fullscreen
 hide: all
 title: fullscreen
-type: trigger
-toggle: true
-```
-
-``` control
-path: loopin/window/cursor
-hide: all
-title: cursor
 type: trigger
 toggle: true
 ```
@@ -42,12 +37,18 @@ subs:
       - .jpg
       - .png
 
+  # You will need to keep these options
+  # updated in your application.
   buffer:
     options:
       - example_planet
 ```
 
-# Recorder
+## Recorder
+
+The `recorder` utility 'renders' a buffer as a sequence of image files, then uses **ffmpeg** to convert them into an mp4 file. In doing so, the clock will be slowed to render each frame precisely.
+
+Results are saved to [./data/recorder/](/loopin/file/data/recorder/).
 
 ``` control
 path: logic/recorder
@@ -61,16 +62,9 @@ subs:
   count:
     type: slider
     min: 30
-    max: 3000
+    max: 300
     precision: 0
     pow: 2.2
-
-
-  duration:
-    type: slider
-    min: 0.25
-    max: 60
-    unit: s
 
   buffer:
     options:
@@ -95,3 +89,23 @@ path: loopin/osd/text
 type: text
 size: 54
 ```
+
+
+# Endpoints
+
+**Loopin**, when combined with the [loopin-server](https://github.com/koopero/loopin-server) module, is a graphics engine with a webserver built in. Many of its internals are available as RESTful endpoints.
+
+## /loopin/buffer/*
+
+We can see any image buffer with Loopin by accessing the */loopin/buffer/\** endpoint.
+
+* [example_planet](/loopin/buffer/example_planet.jpg)
+* [example_earth](/loopin/buffer/example_earth.jpg)
+
+
+## /loopin/read
+
+We can see the entire state of the Loopin engine by examining the [/loopin/read/](/loopin/read/) endpoint. *Warning: Big mass of JSON!*
+
+We can also read a small subset of the state, such as [/loopin/read/render/example_planet](/loopin/read/render/example_planet), which
+will show the parameters of the **example_planet** demo.
