@@ -1,8 +1,10 @@
-clock:
-  mode: time
-
 window:
   title: loopin-starter
   width: 1280
   height: 720
   fullscreen: false
+
+# Here we define white.
+pixels/white:
+  format: hex2
+  data: fff

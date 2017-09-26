@@ -1,18 +1,23 @@
-# written by horten-persist-file at 2017-09-25T19:13:36-07:00
+# written by horten-persist-file at 2017-09-26T06:31:14-07:00
 loopin:
   native:
-    pid: 8062
+    pid: 85069
   window:
     fullscreen: false
     height: 720
     width: 1280
-    x: -1898
-    'y': 209
-    cursor: true
+    x: 6
+    'y': 44
   image:
     example_earth:
       error: null
       file: /Volumes/hdd/koop/loopin/loopin-starter/image/example_earth.jpg
+      height: 500
+      loaded: true
+      width: 1000
+    example_jupiter:
+      error: null
+      file: /Volumes/hdd/koop/loopin/loopin-starter/image/example_jupiter.jpg
       height: 500
       loaded: true
       width: 1000
@@ -22,38 +27,6 @@ loopin:
       height: 500
       loaded: true
       width: 1000
-    example_tethys:
-      error: null
-      file: /Volumes/hdd/koop/loopin/loopin-starter/image/example_tethys.jpg
-      height: 256
-      loaded: true
-      width: 512
-    example_jupiter:
-      error: null
-      file: /Volumes/hdd/koop/loopin/loopin-starter/image/example_jupiter.jpg
-      height: 500
-      loaded: true
-      width: 1000
-    earthmap1k:
-      error: null
-      file: /Volumes/hdd/koop/loopin/loopin-starter/image/earthmap1k.jpg
-      height: 500
-      loaded: true
-      width: 1000
-    example_earth_small:
-      error: null
-      file: /Volumes/hdd/koop/loopin/loopin-starter/image/example_earth_small.jpg
-      height: 64
-      loaded: true
-      width: 128
-    8081-earthmap10k:
-      error: null
-      file: /Volumes/hdd/koop/loopin/loopin-starter/image/8081-earthmap10k.jpg
-      height: 5400
-      loaded: true
-      width: 10800
-    jupiter2_1k:
-      file: /Volumes/hdd/koop/loopin/loopin-starter/image/jupiter2_1k.jpg
     example_planet:
       error: null
       file: /Volumes/hdd/koop/loopin/loopin-starter/image/example_planet.jpg
@@ -63,85 +36,76 @@ loopin:
   shader:
     example_planet:
       vert:
-        data: "#version 150\n/*\n  This is a copy of ofxLoopin's default GLSL vertex shader.\n\n  To create your own shader, duplicate this file within the\n  'shader/' directory with the extension '.vert'\n*/\n\n/*\n\n\n*/\nuniform mat4 modelViewProjectionMatrix;\n\nin vec4 position;\nin vec2 texcoord;\nin vec4 color;\nin vec4 normal;\n\nout vec2 srcCoord;\nout vec3 lightNormal;\n\nuniform float clockTime;\nuniform float lightPitch = 90.0;\n\n/*\n  There's lots of copy pasta in GLSL.\n  This was ganked from https://gist.github.com/yiwenl/3f804e80d0930e34a0b33359259b556c\n*/\nvec2 rotate(vec2 v, float a) {\n\tfloat s = sin(a);\n\tfloat c = cos(a);\n\tmat2 m = mat2(c, -s, s, c);\n\treturn m * v;\n}\nconst float PI = 3.1415;\n\nuniform float planetSpeed = 50000.0;\n\nvoid main()\n{\n  srcCoord = texcoord.xy;\n\n  vec4 pos = position;\n\n\tlightNormal = normal.xyz;\n\n  float phase = clockTime;\n  phase /= 60;\n\tphase /= 365;\n  phase = fract( phase );\n\n\tlightNormal.xy = rotate( lightNormal.xy,\n\t\t( lightPitch + cos( phase * PI * 2.0 ) * 23 )\n\t\t/ 180.0 * PI\n\t);\n\n\n  gl_Position = modelViewProjectionMatrix * pos;\n}\n"
+        data: "#version 150\nuniform mat4 modelViewProjectionMatrix;\n\nin vec4 position;\nin vec2 texcoord;\nin vec4 color;\nin vec4 normal;\n\nout vec2 srcCoord;\nout vec3 lightNormal;\n\nuniform float clockTime;\nuniform float lightPitch = 90.0;\n\n/*\n  There's lots of copy pasta in GLSL.\n  This was ganked from https://gist.github.com/yiwenl/3f804e80d0930e34a0b33359259b556c\n*/\nvec2 rotate(vec2 v, float a) {\n\tfloat s = sin(a);\n\tfloat c = cos(a);\n\tmat2 m = mat2(c, -s, s, c);\n\treturn m * v;\n}\n\nconst float PI = 3.1415;\nuniform float planetSpeed = 1.0;\n\nvoid main()\n{\n  srcCoord = texcoord.xy;\n\n  vec4 pos = position;\n  gl_Position = modelViewProjectionMatrix * pos;\n\n\t// Calculate axial tilt\n\tlightNormal = normal.xyz;\n  float phase = clockTime;\n  phase /= 60;\n\tphase /= 365;\n  phase = fract( phase );\n\n\tlightNormal.xy = rotate( lightNormal.xy,\n\t\t( lightPitch + cos( phase * PI * 2.0 ) * 23 )\n\t\t/ 180.0 * PI\n\t);\n\n}\n"
         file: /Volumes/hdd/koop/loopin/loopin-starter/shader/example_planet.vert
       frag:
         data: |
           #version 150
-          uniform sampler2D srcSampler;
-
-          uniform sampler2D lightmapSampler;
 
           in vec2 srcCoord;
-          in vec3 lightNormal;
-
           out vec4 outputColour;
 
-          uniform float planetBlurAmount = 1.0;
+          // Custom input from example_planet.vert
+          in vec3 lightNormal;
+
+          // Clock uniforms supplied by ofxLoopin
           uniform float clockTime;
           uniform float clockDelta;
 
+          // Custom uniforms unique to this shader.
+          uniform sampler2D srcSampler;
+          uniform sampler2D lightmapSampler;
+          uniform float planetBlurAmount = 1.0;
           uniform float lightGamma = 0.5;
           uniform float lightGain = 1.0;
           uniform float lightContrast = 1.0;
-
-
 
 
           void main()
           {
             vec2 coord = srcCoord;
 
+            // Compute the phase of the planet and add it to coord.x
             float phase = clockTime;
             phase /= -60;
-
             phase = fract( phase );
-            phase += coord.x;
-            coord.x = phase;
+            coord.x += phase;
 
-
-            vec4 colour = vec4(0,0,0,0);
-
+            // Create motion blur by sampling srcSampler many times
+            // and averaging results.
             int blurSamples = 32;
-
+            vec4 colour = vec4(0,0,0,0);
             float blurMix = 1.0/float(blurSamples);
-            float blurXStep =
-              clockDelta
-              * planetBlurAmount
-              / 60.0
-              * blurMix
-            ;
-
+            float blurXStep = clockDelta * planetBlurAmount / 60.0 * blurMix;
             for ( int i = 0; i < blurSamples; i ++ ) {
               colour += texture(srcSampler, coord ) * blurMix;
               coord.x += blurXStep;
             }
 
-
+            // Get lightmap coordinate from normal
             vec2 light = -lightNormal.xy;
             light.x += 1;
             light.x *= 0.5;
             light.y = 0;
 
+            // Get lightmap sample and apply lightContrast
             colour.rgb *= mix(
               vec3(1,1,1),
               texture(lightmapSampler, light ).rgb,
               lightContrast
             );
 
-
+            // Apply lightGamma
             colour.r = pow( colour.r, lightGamma );
             colour.g = pow( colour.g, lightGamma );
             colour.b = pow( colour.b, lightGamma );
 
+            // Apply lightGain
             colour.rgb *= lightGain;
 
             outputColour = colour;
           }
         file: /Volumes/hdd/koop/loopin/loopin-starter/shader/example_planet.frag
-      loaded: true
-      stderr: "[ error ] ofShader: setupShaderFromSource(): GL_FRAGMENT_SHADER shader failed to compile\n[ error ] ofShader: GL_FRAGMENT_SHADER shader reports:\nERROR: 0:57: Use of undeclared identifier 'lightContrast'\n[ error ] ofShader: GL_FRAGMENT_SHADER, offending line 57 :\n\t   55\t    vec3(1,1,1),\n\t   56\t    texture(lightmapSampler, light ).rgb,\n\t   57\t    lightContrast\n\t   58\t  );\n\t   59\t\n[ error ] ofShader: checkProgramLinkStatus(): program failed to link\n[ error ] ofShader: ofShader: program reports:\nERROR: One or more attached shaders not successfully compiled\n"
-    default:
       loaded: true
     solidRGBA:
       frag:
@@ -160,80 +124,70 @@ loopin:
             OUT = vec4( red, green, blue, alpha );
           }
         file: >-
-          /Volumes/hdd/koop/loopin/loopin-starter/native/ofxLoopin-0.8.0-alpha-osx/bin/data/ofxLoopin/shader/solidRGBA.frag
+          /Volumes/hdd/koop/loopin/loopin-native/build/ofxLoopin-0.8.0-beta-osx/bin/data/ofxLoopin/shader/solidRGBA.frag
       loaded: true
-    blank:
-      loaded: true
+  pixels:
+    example_lightmap:
+      data: 2659a8 00118d 00276b 001459 b79170 ccbfbd e3e8ff ffffff
+      buffer: null
+      channels: rgb
+      format: hex
+      height: 0
+      input: change
+      output: none
+      shader: solidRGBA
+      width: 0
   input:
-    x: 0.5281250476837158
-    'y': 0.9166666269302368
+    x: 0.8718750476837158
+    'y': 0.9861111640930176
   camera:
     example_camera:
-      zoom: 1.153034300791556
-      distance: 3
-      fov: 32.68762576642358
-      yaw: -10.448548812664797
-      pitch: 16.195250659630588
-      roll: -40.226912928759894
+      distance: 1.087696335078534
+      fov: 30
+      zoom: -0.36649214659686
+      yaw: -3.7696335078535412
+      pitch: -49.37041884816754
+      roll: -10.236910994764443
   render:
     example_planet:
       float:
-        planetSpeed: 0.00001157407381
-        planetBlurAmount: 10
-        lightPitch: -1.6622691292875658
-        lightGamma: 2.6021108179419525
-        lightGain: 2.730613017000716
-        float:
-          planetSpeed: 600
-        lightContrast: 0.928816350310844
-      src:
-        buffer: example_jupiter
-      passes: 3.014253760799975
+        planetBlurAmount: 1.966432286331707
+        lightContrast: 1.124776853019379
+        lightGamma: 0.9388743455497374
+        lightGain: 1.2574764946136348
+        lightPitch: -0.23560209424078948
       texture:
         lightmap:
-          filter: linear
           buffer: example_lightmap
-      planetSpeed: 120
+          filter: linear
+        src:
+          buffer: example_earth
       clock:
-        speed: 10.957918044129585
-    example_sphere:
-      float:
-        lightPitch: 110.2352941176471
+        speed: 12.23795405645752
+  show:
+    filter: linear
+    buffer: example_planet
   mesh:
     example_sphere:
       sphere:
-        rows: 50
-        cols: 50
-      float:
-        lightPitch: 48.00000000000006
-  pixels:
-    example_lightmap:
-      data: 2655a8 00118d 00276b 001459 b79170 ccbfbd e3e8ff ffffff
-  show:
-    buffer: example_planet
-    filter: linear
+        rows: 39.78795811518324
+        cols: 39.72643979057591
   save:
     example_planet:
-      dest: /Volumes/hdd/koop/loopin/loopin-starter/data/snap/snap.1506392001631.jpg
+      dest: >-
+        /Volumes/hdd/koop/loopin/loopin-starter/tmp/012561.example_planet.B.3n26.jpg
       format: jpg
-      frame: 1
+      frame: 12562
       quality: best
   osd:
-    enabled: false
+    enabled: true
     text: ''
-    client: ''
-  clock:
-    mode: time
-    rate: 60
-    speed: 1
 logic:
   snapshot:
+    extension: .jpg
     buffer: example_planet
-    snap: 1506153977686
   recorder:
-    start: 1506246907393
-    buffer: example_planet
-    count: 600.053063353977
-    delay: 0
+    start: !<tag:yaml.org,2002:js/undefined> ''
     rate: 60
-    duration: 60
+    count: 60.137443805326
+    buffer: example_planet
