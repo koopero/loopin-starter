@@ -39,38 +39,22 @@ uniform float planetSpeed = 50000.0;
 
 void main()
 {
-    srcCoord = texcoord.xy;
+  srcCoord = texcoord.xy;
 
-
-    vec4 pos = position;
-    // pos.xz = rotate( pos.xz,
-    //   clockTime
-    //   * planetSpeed
-    //   / 60.0
-    //   * 3.1415926
-    //   * 2.0
-    // );
+  vec4 pos = position;
 
 	lightNormal = normal.xyz;
-    // lightNormal.xz = rotate( lightNormal.xz,
-    //   clockTime
-    //   * planetSpeed
-    //   / 60.0
-    //   * 3.1415926
-    //   * 2.0
-    // );
 
   float phase = clockTime;
-  phase *= planetSpeed;
   phase /= 60;
 	phase /= 365;
   phase = fract( phase );
 
-  	lightNormal.xy = rotate( lightNormal.xy,
-			( lightPitch + cos( phase * PI * 2.0 ) * 23 )
-			/ 180.0 * PI
-		);
+	lightNormal.xy = rotate( lightNormal.xy,
+		( lightPitch + cos( phase * PI * 2.0 ) * 23 )
+		/ 180.0 * PI
+	);
 
 
-    gl_Position = modelViewProjectionMatrix * pos;
+  gl_Position = modelViewProjectionMatrix * pos;
 }

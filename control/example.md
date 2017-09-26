@@ -1,4 +1,12 @@
+First, see the inputs to the system.
+
 ``` control
+# This is the most useful control in the system,
+# the ability to choose which buffer in shown on
+# screen. It is recommended to copy-pasta this
+# control to all control pages, with options
+# relevant to your application.
+
 path: loopin/show/buffer
 options:
   - example_planet
@@ -8,13 +16,14 @@ options:
   - example_jupiter
 ```
 
+
+
 ``` control
 path: loopin/show/filter
 options:
   - linear
   - nearest
 ```
-
 
 ## Planet
 
@@ -27,42 +36,65 @@ options:
 ```
 
 ``` control
-path: loopin/render/example_planet/float/planetSpeed
-type: float
-min: 0.00001157407381
-max: 300
-pow: 3
-digits: 3
-unit: 'rpm'
+path: loopin/mesh/example_sphere/sphere
+subs:
+  rows:
+    type: float
+    min: 3
+    max: 50
+    digits: 0
+  cols:
+    type: float
+    min: 3
+    max: 50
+    digits: 0
 ```
 
+## Clock
+``` control
+path: loopin/render/example_planet/clock
+subs:
+  speed:
+    type: float
+    min: 0.00001157407381
+    max: 300
+    pow: 3
+    digits: 3
+    unit: 'rpm'
+```
+
+## Motion Blur
 ``` control
 path: loopin/render/example_planet/float/planetBlurAmount
 type: float
 min: 0
 max: 10
-pow: 3
+pow: 2
 digits: 3
 unit: '%'
+markers:
+  - 0.5
+  - 1
 ```
 
-## Projection
-
-### Render
-``` control
-path: loopin/render/example_planet/passes
-type: float
-digits: 0
-min: 1
-max: 64
-pow: 2
-```
-
-### Camera
+## Camera
 
 ``` control
 path: loopin/camera/example_camera
 subs:
+  distance:
+    type: float
+    min: 0
+    max: 3
+
+  fov:
+    type: float
+    min: 30
+    max: 170
+    unit: °
+    digits: 3
+    pow: 2.4
+
   zoom:
     type: float
     min: -2
@@ -71,24 +103,6 @@ subs:
       - -1
       - 0
       - 1
-    digits: 3
-
-  distance:
-    type: float
-    min: -1
-    max: 4
-    markers:
-      - 0
-      - 1
-
-  fov:
-    type: float
-    min: 4
-    max: 170
-    markers:
-      - 15
-      - 45
-      - 90
     digits: 3
 
   yaw:
@@ -114,36 +128,19 @@ subs:
     unit: deg
 ```
 
-### Mesh
-``` control
-path: loopin/mesh/example_sphere/sphere
-subs:
-  rows:
-    type: float
-    min: 3
-    max: 50
-    digits: 0
-  cols:
-    type: float
-    min: 3
-    max: 50
-    digits: 0
-```
+
+## Lighting
 
 
-``` control
-path: loopin/pixels/example_lightmap/data
-type: pixels
-cols: 8
-rows: 1
-channels: rgb
-```
-
-
-### Lighting
 ``` control
 path: loopin/render/example_planet/float
 subs:
+  lightContrast:
+    type: float
+    min: 0.25
+    max: 4
+    pow: 2
+
   lightPitch:
     type: float
     min: -90
@@ -172,4 +169,22 @@ subs:
     options:
       - linear
       - nearest
+```
+
+Finally, `example_lightmap` itself.
+
+``` control
+path: loopin/pixels/example_lightmap/data
+type: pixels
+cols: 8
+rows: 1
+channels: rgb
+```
+
+The input and output of the pixels `pixels` operator is just text, so we can edit it directly or paste it into presets.
+
+``` control
+path: loopin/pixels/example_lightmap/data
+type: text
+size: 30
 ```
