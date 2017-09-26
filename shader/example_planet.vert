@@ -1,15 +1,4 @@
 #version 150
-/*
-  This is a copy of ofxLoopin's default GLSL vertex shader.
-
-  To create your own shader, duplicate this file within the
-  'shader/' directory with the extension '.vert'
-*/
-
-/*
-
-
-*/
 uniform mat4 modelViewProjectionMatrix;
 
 in vec4 position;
@@ -33,18 +22,19 @@ vec2 rotate(vec2 v, float a) {
 	mat2 m = mat2(c, -s, s, c);
 	return m * v;
 }
-const float PI = 3.1415;
 
-uniform float planetSpeed = 50000.0;
+const float PI = 3.1415;
+uniform float planetSpeed = 1.0;
 
 void main()
 {
   srcCoord = texcoord.xy;
 
   vec4 pos = position;
+  gl_Position = modelViewProjectionMatrix * pos;
 
+	// Calculate axial tilt
 	lightNormal = normal.xyz;
-
   float phase = clockTime;
   phase /= 60;
 	phase /= 365;
@@ -55,6 +45,4 @@ void main()
 		/ 180.0 * PI
 	);
 
-
-  gl_Position = modelViewProjectionMatrix * pos;
 }
