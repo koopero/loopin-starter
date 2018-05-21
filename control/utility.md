@@ -1,3 +1,25 @@
+# Show
+``` control
+path: loopin/show
+subs:
+  alpha:
+    options:
+      - ignore
+      - multiply
+      - divide
+      - show
+    
+  filter:
+    options:
+      - linear
+      - nearest
+
+  buffer:
+    # Until controls map properly, put your buffers here
+    - example
+    - output
+```
+
 
 # Window
 
@@ -89,23 +111,3 @@ path: loopin/osd/text
 type: text
 size: 54
 ```
-
-
-# Endpoints
-
-**Loopin**, when combined with the [loopin-server](https://github.com/koopero/loopin-server) module, is a graphics engine with a webserver built in. Many of its internals are available as RESTful endpoints.
-
-## /loopin/buffer/*
-
-We can see any image buffer with Loopin by accessing the */loopin/buffer/\** endpoint.
-
-* [example_planet](/loopin/buffer/example_planet.jpg)
-* [example_earth](/loopin/buffer/example_earth.jpg)
-
-
-## /loopin/read
-
-We can see the entire state of the Loopin engine by examining the [/loopin/read/](/loopin/read/) endpoint. *Warning: Big mass of JSON!*
-
-We can also read a small subset of the state, such as [/loopin/read/render/example_planet](/loopin/read/render/example_planet), which
-will show the parameters of the **example_planet** demo.

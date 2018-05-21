@@ -1,16 +1,16 @@
 debug:
-  verbose: false
+  verbose: true
 
 server:
   listen: 7004
 
-  index: control/example.md
+  index: control/index.md
 
   page:
-    title: Loopin Stater Project
+    title: Loopin Base Project
     nav:
       - title: Example
-        page: control/example.md
+        page: control/index.md
 
       - title: Utility
         page: control/utility.md

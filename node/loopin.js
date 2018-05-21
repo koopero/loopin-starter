@@ -14,8 +14,9 @@ loopin.plugin('presetDir')
 loopin.presetDir( { autoload: true } )
 
 // Load and watch all shaders in the directory ./shader
-loopin.plugin('shaderDir')
-loopin.shaderDir( { autoload: true } )
+loopin.plugin( require('loopin-shaders'), {
+  
+})
 
 // Load and watch all images in the directory ./image
 // Note that due to some bugs in the file watching
@@ -36,7 +37,8 @@ if ( config.get('debug.verbose') )
 
 // Load the loopin-native module
 loopin.plugin( require('loopin-native'), {
-  useEnv: true
+  useEnv: true,
+  verbose: config.get('debug.verbose'),
 } )
 
 loopin.bootstrap()
